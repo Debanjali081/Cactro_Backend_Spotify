@@ -42,9 +42,19 @@ export async function playTrack(req, res) {
 
 export async function pauseTrack(req, res) {
   try {
+    // First check if there is an active device
+    const devicesRes = await spotifyApi(getAccessToken()).get("/me/player/devices");
+    const activeDevice = devicesRes.data.devices.find(d => d.is_active);
+
+    if (!activeDevice) {
+      return res.status(400).json({ error: "No active device found. Open Spotify and start playing on a device first." });
+    }
+
     await spotifyApi(getAccessToken()).put("/me/player/pause");
     res.json({ message: "Playback stopped" });
   } catch (err) {
+    console.error("Pause error:", err.response?.data || err.message);
     res.status(500).json({ error: err.message });
   }
 }
+
