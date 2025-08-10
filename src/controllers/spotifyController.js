@@ -30,7 +30,7 @@ export async function getSpotifyData(req, res) {
 }
 
 export async function playTrack(req, res) {
-  const { uri } = req.query;
+  const { uri } = req.body;
   try {
     await spotifyApi(getAccessToken()).put("/me/player/play", { uris: [uri] });
     res.json({ message: "Playback started" });
