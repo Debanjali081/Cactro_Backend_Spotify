@@ -30,7 +30,7 @@ export async function getSpotifyData(req, res) {
 }
 
 export async function playTrack(req, res) {
-  const { uri } = req.body;
+  const { uri } = req.body; // ✅ body instead of query
   try {
     await spotifyApi(getAccessToken()).put("/me/player/play", { uris: [uri] });
     res.json({ message: "Playback started" });
@@ -38,6 +38,7 @@ export async function playTrack(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
+
 
 export async function pauseTrack(req, res) {
   try {
